@@ -15,7 +15,7 @@ class DailyReportRequest extends FormRequest
     {
       return true;
     }
-  
+
     /**
      * Get the validation rules that apply to the request.
      *
@@ -23,12 +23,19 @@ class DailyReportRequest extends FormRequest
      */
     public function rules()
     {
-        //
+        return [
+          'reporting_time' => 'required',
+          'title' => 'required',
+          'contents' => 'required',
+        ];
     }
-  
+
     public function messages()
     {
-        //
+        return [
+          'reporting_time.required' => '入力必須の項目です。',
+          'title.required' => '入力必須の項目です。',
+          'contents.required' => '入力必須の項目です。',
+        ];
     }
 }
-
