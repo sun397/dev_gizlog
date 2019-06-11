@@ -8,14 +8,14 @@ use App\Models\DailyReport;
 use App\Http\Requests\User\DailyReportRequest;
 use Auth;
 
-class daily_reportController extends Controller
+class Daily_reportController extends Controller
 {
     private $dailyReport;
 
     public function __construct(DailyReport $instanceClass)
     {
-        $this->dailyReport = $instanceClass;
         $this->middleware('auth');
+        $this->dailyReport = $instanceClass;
     }
 
     /**
@@ -26,15 +26,12 @@ class daily_reportController extends Controller
     public function index(Request $request)
     {
         $input = $request->get('reporting_time');
-        if(!empty($input))
-        {
-          $dailyReports = $this->dailyReport->where('reporting_time', 'LIKE', "%{$input}%")->where('user_id', Auth::id())->get();
-          return view('user.daily_report.index', compact('dailyReports', 'request'));
-        }else
-        {
+        if(empty($input)) {
           $dailyReports = $this->dailyReport->getAll(Auth::id());
-          return view('user.daily_report.index', compact('dailyReports'));
+        }else {
+          $dailyReports = $this->dailyReport->searchDaily($input)->where('user_id', Auth::id());
         }
+        return view('user.daily_report.index', compact('dailyReports', 'request'));
     }
 
     /**
@@ -58,7 +55,7 @@ class daily_reportController extends Controller
         $input = $request->all();
         $input['user_id'] = Auth::id();
         $this->dailyReport->fill($input)->save();
-        return redirect()->to('daily_report');
+        return redirect()->route('daily_report.index');
     }
 
     /**
@@ -96,7 +93,7 @@ class daily_reportController extends Controller
     {
         $input = $request->all();
         $this->dailyReport->find($id)->fill($input)->save();
-        return redirect()->to('daily_report');
+        return redirect()->route('daily_report.index');
     }
 
     /**
@@ -108,6 +105,6 @@ class daily_reportController extends Controller
     public function destroy($id)
     {
         $this->dailyReport->find($id)->delete();
-        return redirect()->to('daily_report');
+        return redirect()->route('daily_report.index');
     }
 }

@@ -26,4 +26,9 @@ class DailyReport extends Model
     {
         return $this->where('user_id', $id)->get();
     }
+
+    public function searchDaily($input)
+    {
+        return $this->where('reporting_time', 'LIKE', "%{$input}%")->get();
+    }
 }
