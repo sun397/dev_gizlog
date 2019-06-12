@@ -14,12 +14,12 @@ class CreateDailyReportsTable extends Migration
     public function up()
     {
         Schema::create('daily_reports', function (Blueprint $table) {
-          $table->increments('id');
-          $table->integer('user_id');
-          $table->string('title');
-          $table->text('contents');
-          $table->date('reporting_time');
-          $table->timestamps();
+            $table->increments('id');
+            $table->integer('user_id');
+            $table->string('title');
+            $table->text('contents');
+            $table->date('reporting_time');
+            $table->timestamps();
         });
     }
 

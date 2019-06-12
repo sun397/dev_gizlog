@@ -13,7 +13,7 @@ class DailyReportRequest extends FormRequest
      */
     public function authorize()
     {
-      return true;
+        return true;
     }
 
     /**
@@ -24,18 +24,22 @@ class DailyReportRequest extends FormRequest
     public function rules()
     {
         return [
-          'reporting_time' => 'required',
-          'title' => 'required',
-          'contents' => 'required',
+            'reporting_time' => 'required|date|before:now',
+            'title' => 'required|max:30',
+            'contents' => 'required|max:250',
         ];
     }
 
     public function messages()
     {
         return [
-          'reporting_time.required' => '入力必須の項目です。',
-          'title.required' => '入力必須の項目です。',
-          'contents.required' => '入力必須の項目です。',
+            'reporting_time.required' => '入力必須の項目です。',
+            'reporting_time.date' => '有効な値を入力してください。',
+            'reporting_time.before' => '今日以前の日付を入力してください。',
+            'title.required' => '入力必須の項目です。',
+            'title.max' => '30文字以内で入力してください。',
+            'contents.required' => '入力必須の項目です。',
+            'contents.max' => '250文字以内で入力してください。',
         ];
     }
 }
