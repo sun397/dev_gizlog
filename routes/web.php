@@ -42,6 +42,10 @@ Route::group(['prefix' => '/', 'user.', 'namespace' => 'User'], function () {
 
     Route::resource('report', DailyReportController::class);
 
+    Route::resource('question', QuestionController::class);
+    Route::post('question/confirm', 'QuestionController@confirm')->name('question.confirm');
+    Route::get('question/mypage', 'QuestionController@myPage')->name('question.mypage');
+
 });
 
 
@@ -89,4 +93,3 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.' ,'namespace' => 'Admin'], fu
     Route::get('/register/', 'Auth\AdminRegisterController@showAdminRegistrationForm');
 
 });
-

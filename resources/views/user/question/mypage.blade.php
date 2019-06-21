@@ -18,10 +18,11 @@
         </tr>
       </thead>
       <tbody>
+        @foreach ($questions as $question)
         <tr class="row">
           <td class="col-xs-2"></td>
-          <td class="col-xs-1"></td>
-          <td class="col-xs-5"></td>
+          <td class="col-xs-1">{{ $question->tag_category_id }}</td>
+          <td class="col-xs-5">{{ $question->title }}</td>
           <td class="col-xs-2"><span class="point-color"></span></td>
           <td class="col-xs-1">
             <a class="btn btn-success" href="">
@@ -36,10 +37,10 @@
             </form>
           </td>
         </tr>
+        @endforeach
       </tbody>
     </table>
   </div>
 </div>
 
 @endsection
-
