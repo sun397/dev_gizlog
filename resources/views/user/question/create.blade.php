@@ -12,15 +12,15 @@
               <option value="{{ $category->id }}">{{ $category->name }}</option>
             @endforeach
         </select>
-        <span class="help-block"></span>
+        <span class="help-block">{{ $errors->first('tag_category_id') }}</span>
       </div>
       <div class="form-group">
         {!! Form::input('text', 'title', null, ['require', 'class' => 'form-control', 'placeholder' => 'title']) !!}
-        <span class="help-block"></span>
+        <span class="help-block">{{ $errors->first('title') }}</span>
       </div>
       <div class="form-group">
         {!! Form::textarea('content', null, ['require', 'class' => 'form-control', 'placeholder' => 'Please write down your question here...']) !!}
-        <span class="help-block"></span>
+        <span class="help-block">{{ $errors->first('content') }}</span>
       </div>
       {!! Form::submit('create', ['class' => 'btn btn-success pull-right', 'name' => 'confirm']) !!}
     {!! Form::close() !!}

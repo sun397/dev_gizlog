@@ -3,10 +3,14 @@
 
 <h2 class="brand-header">質問一覧</h2>
 <div class="main-wrap">
-  <form>
+  {!! Form::open(['route' => 'question.index', 'method' => 'GET']) !!}
     <div class="btn-wrapper">
       <div class="search-box">
-        <input class="form-control search-form" placeholder="Search words..." name="search_word" type="text">
+        @if (empty($input['search_word']))
+          {!! Form::input('text', 'search_word', null, ['class' => 'form-control search_form', 'placeholder' => 'Search words...']) !!}
+        @else
+          {!! Form::input('text', 'search_word', $input['search_word'], ['class' => 'form-control search_form']) !!}
+        @endif
         <button type="submit" class="search-icon"><i class="fa fa-search" aria-hidden="true"></i></button>
       </div>
       <a class="btn" href="{{ route('question.create') }}"><i class="fa fa-plus" aria-hidden="true"></i></a>
@@ -16,12 +20,12 @@
     </div>
     <div class="category-wrap">
       <div class="btn all" id="0">all</div>
-      @foreach ($categories as $category)
-        <div class="btn {{ $category->name }}" id="{{ $category->id }}">{{ $category->name }}</div>
-      @endforeach
-      <input id="category-val" name="tag_category_id" type="hidden" value="">
+        @foreach ($categories as $category)
+          <div class="btn {{ $category->name }}" id="{{ $category->id }}">{{ $category->name }}</div>
+        @endforeach
+      {!! Form::hidden('tag_category_id', 0, ['id' => 'category-val']) !!}
     </div>
-  </form>
+  {!! Form::close() !!}
   <div class="content-wrapper table-responsive">
     <table class="table table-striped">
       <thead>
@@ -36,12 +40,12 @@
       <tbody>
         @foreach ($questions as $question)
           <tr class="row">
-            <td class="col-xs-1"><img src="" class="avatar-img"></td>
-            <td class="col-xs-2">{{ $question->tag_category_id }}</td>
+            <td class="col-xs-1"><img src="{{ $question->user->avatar }}" class="avatar-img"></td>
+            <td class="col-xs-2">{{ $question->category->name }}</td>
             <td class="col-xs-6">{{ $question->title }}</td>
-            <td class="col-xs-1"><span class="point-color"></span></td>
+            <td class="col-xs-1"><span class="point-color">{{ count($question->comment) }}</span></td>
             <td class="col-xs-2">
-              <a class="btn btn-success" href="">
+              <a class="btn btn-success" href="{{ route('question.show', $question->id) }}">
                 <i class="fa fa-comments-o" aria-hidden="true"></i>
               </a>
             </td>

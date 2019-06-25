@@ -4,20 +4,24 @@ namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Http\Requests\User\QuestionsRequest;
 use App\Models\Question;
 use App\Models\TagCategory;
+use App\Models\Comment;
 use Auth;
 
 class QuestionController extends Controller
 {
     private $question;
     private $category;
+    private $comment;
 
-    public function __construct(Question $question, TagCategory $category)
+    public function __construct(QuestionsRequest $question, TagCategory $category, Comment $comment)
     {
         $this->middleware('auth');
         $this->question = $question;
         $this->category = $category;
+        $this->comment  = $comment;
     }
 
     /**
@@ -25,12 +29,19 @@ class QuestionController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $questions = $this->question->getAll(Auth::id());
-        // dd($questions);
+        $input = $request->all();
+        //dd($input);
+        if (empty($input)) {
+            $questions = $this->question->all();
+        } elseif (!empty($input['search_word'])) {
+            $questions = $this->question->searchWord($input);
+        } else {
+            $questions = $this->question->searchCategory($input);
+        }
         $categories = $this->category->all();
-        return view('user.question.index', compact('questions', 'categories'));
+        return view('user.question.index', compact('questions', 'categories', 'input'));
     }
 
     /**
@@ -50,7 +61,7 @@ class QuestionController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(QuestionsRequest $request)
     {
         $input = $request->all();
         $input['user_id'] = Auth::id();
@@ -78,7 +89,9 @@ class QuestionController extends Controller
      */
     public function edit($id)
     {
-        // return view('user.question.edit');
+        $question = $this->question->find($id);
+        $categories = $this->category->all();
+        return view('user.question.edit', compact('question', 'categories'));
     }
 
     /**
@@ -88,9 +101,11 @@ class QuestionController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(QuestionsRequest $request, $id)
     {
-        //
+        $input = $request->all();
+        $this->question->find($id)->fill($input)->save();
+        return redirect()->route('question.index');
     }
 
     /**
@@ -101,7 +116,8 @@ class QuestionController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $this->question->find($id)->delete();
+        return redirect()->route('question.index');
     }
 
     /**
@@ -110,11 +126,10 @@ class QuestionController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function confirm(Request $request)
+    public function confirm(Request $request, $id = null)
     {
-        // $data = $request->all();
-        // dd($data);
-        return view('user.question.confirm', compact('request'));
+        $category = $this->category->find($request['tag_category_id'])->name;
+        return view('user.question.confirm', compact('request', 'category'));
     }
 
     /**
@@ -127,5 +142,18 @@ class QuestionController extends Controller
     {
         $questions = $this->question->getAll(Auth::id());
         return view('user.question.mypage', compact('questions'));
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function storeComment(Request $request)
+    {
+        $input = $request->all();
+        $this->comment->fill($input)->save();
+        return redirect()->route('question.index');
     }
 }
