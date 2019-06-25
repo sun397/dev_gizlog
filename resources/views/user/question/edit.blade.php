@@ -13,15 +13,21 @@
               <option value="{{ $category->id }}">{{ $category->name }}</option>
             @endforeach
         </select>
-        <span class="help-block"></span>
+        @if ($errors->has('tag_category_id'))
+          <span class="help-block">{{ $errors->first('tag_category_id') }}</span>
+        @endif
       </div>
       <div class="form-group">
         {!! Form::input('text', 'title', $question->title, ['require', 'class' => 'form-control']) !!}
-        <span class="help-block"></span>
+        @if ($errors->has('title'))
+          <span class="help-block">{{ $errors->first('title') }}</span>
+        @endif
       </div>
       <div class="form-group">
         {!! Form::textarea('content', $question->content, ['require', 'class' => 'form-control']) !!}
-        <span class="help-block"></span>
+        @if ($errors->has('content'))
+          <span class="help-block">{{ $errors->first('content') }}</span>
+        @endif
       </div>
       {!! Form::submit('update', ['class' => 'btn btn-success pull-right', 'name' => 'confirm']) !!}
     {!! Form::close() !!}

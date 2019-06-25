@@ -5,6 +5,7 @@ namespace App\Http\Controllers\User;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Http\Requests\User\QuestionsRequest;
+use App\Http\Requests\User\CommentRequest;
 use App\Models\Question;
 use App\Models\TagCategory;
 use App\Models\Comment;
@@ -16,7 +17,7 @@ class QuestionController extends Controller
     private $category;
     private $comment;
 
-    public function __construct(QuestionsRequest $question, TagCategory $category, Comment $comment)
+    public function __construct(Question $question, TagCategory $category, Comment $comment)
     {
         $this->middleware('auth');
         $this->question = $question;
@@ -37,6 +38,8 @@ class QuestionController extends Controller
             $questions = $this->question->all();
         } elseif (!empty($input['search_word'])) {
             $questions = $this->question->searchWord($input);
+        } elseif ($input['tag_category_id'] === '0') {
+            $questions = $this->question->all();
         } else {
             $questions = $this->question->searchCategory($input);
         }
@@ -61,7 +64,7 @@ class QuestionController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(QuestionsRequest $request)
+    public function store(Request $request)
     {
         $input = $request->all();
         $input['user_id'] = Auth::id();
@@ -101,7 +104,7 @@ class QuestionController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(QuestionsRequest $request, $id)
+    public function update(Request $request, $id)
     {
         $input = $request->all();
         $this->question->find($id)->fill($input)->save();
@@ -126,7 +129,7 @@ class QuestionController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function confirm(Request $request, $id = null)
+    public function confirm(QuestionsRequest $request, $id = null)
     {
         $category = $this->category->find($request['tag_category_id'])->name;
         return view('user.question.confirm', compact('request', 'category'));
@@ -150,7 +153,7 @@ class QuestionController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function storeComment(Request $request)
+    public function storeComment(CommentRequest $request)
     {
         $input = $request->all();
         $this->comment->fill($input)->save();
