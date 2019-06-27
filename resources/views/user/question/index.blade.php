@@ -23,7 +23,7 @@
         @foreach ($categories as $category)
           <div class="btn {{ $category->name }}" id="{{ $category->id }}">{{ $category->name }}</div>
         @endforeach
-      {!! Form::hidden('tag_category_id', 0, ['id' => 'category-val']) !!}
+      {!! Form::hidden('tag_category_id', null, ['id' => 'category-val']) !!}
     </div>
   {!! Form::close() !!}
   <div class="content-wrapper table-responsive">

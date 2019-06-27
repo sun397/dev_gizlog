@@ -30,14 +30,14 @@ class Question extends Model
         return $this->where('user_id', $id)->get();
     }
 
-    public function searchWord($input)
+    public function searchWord($search_word)
     {
-        return $this->where('title', 'LIKE', "%{$input['search_word']}%")->get();
+        return $this->where('title', 'LIKE', "%{$search_word}%")->get();
     }
 
-    public function searchCategory($input)
+    public function searchCategory($search_category)
     {
-        return $this->where('tag_category_id', 'LIKE', "%{$input['tag_category_id']}%")->get();
+        return $this->where('tag_category_id', 'LIKE', "%{$search_category}%")->get();
     }
 
     public function comment()

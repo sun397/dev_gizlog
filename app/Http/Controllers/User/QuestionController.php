@@ -33,14 +33,15 @@ class QuestionController extends Controller
     public function index(Request $request)
     {
         $input = $request->all();
-        if (empty($input)) {
+        $search_word = $input['search_word'];
+        $search_category = $input['tag_category_id'];
+        // dd($search_word);
+        if (empty($input) || $search_category === '0') {
             $questions = $this->question->all();
-        } elseif (!empty($input['search_word'])) {
-            $questions = $this->question->searchWord($input);
-        } elseif ($input['tag_category_id'] === '0') {
-            $questions = $this->question->all();
+        } elseif (!empty($search_word)) {
+            $questions = $this->question->searchWord($search_word);
         } else {
-            $questions = $this->question->searchCategory($input);
+            $questions = $this->question->searchCategory($search_category);
         }
         $categories = $this->category->all();
         return view('user.question.index', compact('questions', 'categories', 'input'));
@@ -125,6 +126,7 @@ class QuestionController extends Controller
     /**
      * Display the specified resource.
      *
+     * @param  \App\Http\Requests\User\QuestionsRequest  $request
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
@@ -149,7 +151,7 @@ class QuestionController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Http\Requests\User\CommentRequest  $request
      * @return \Illuminate\Http\Response
      */
     public function storeComment(CommentRequest $request)
