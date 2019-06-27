@@ -35,7 +35,6 @@ class QuestionController extends Controller
         $input = $request->all();
         $search_word = $input['search_word'];
         $search_category = $input['tag_category_id'];
-        // dd($search_word);
         if (empty($input) || $search_category === '0') {
             $questions = $this->question->all();
         } elseif (!empty($search_word)) {
