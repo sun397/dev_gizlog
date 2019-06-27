@@ -33,8 +33,8 @@ class QuestionController extends Controller
     public function index(Request $request)
     {
         $input = $request->all();
-        $search_word = $input['search_word'];
-        $search_category = $input['tag_category_id'];
+        $search_word = $request['search_word'];
+        $search_category = $request['tag_category_id'];
         if (empty($input) || $search_category === '0') {
             $questions = $this->question->all();
         } elseif (!empty($search_word)) {
