@@ -35,12 +35,10 @@ class QuestionController extends Controller
         $input = $request->all();
         $search_word = $request['search_word'];
         $search_category = $request['tag_category_id'];
-        if (empty($input) || $search_category === '0') {
+        if (empty($input)) {
             $questions = $this->question->all();
-        } elseif (!empty($search_word)) {
-            $questions = $this->question->searchWord($search_word);
         } else {
-            $questions = $this->question->searchCategory($search_category);
+            $questions = $this->question->searchQuestion($search_category, $search_word);
         }
         $categories = $this->category->all();
         return view('user.question.index', compact('questions', 'categories', 'input'));
@@ -126,7 +124,6 @@ class QuestionController extends Controller
      * Display the specified resource.
      *
      * @param  \App\Http\Requests\User\QuestionsRequest  $request
-     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
     public function confirm(QuestionsRequest $request)
@@ -138,7 +135,6 @@ class QuestionController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
     public function myPage()

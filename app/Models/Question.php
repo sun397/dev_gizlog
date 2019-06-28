@@ -27,14 +27,15 @@ class Question extends Model
         return $this->where('user_id', $id)->get();
     }
 
-    public function searchWord($search_word)
+    public function searchQuestion($search_category, $search_word)
     {
-        return $this->where('title', 'LIKE', "%{$search_word}%")->get();
-    }
-
-    public function searchCategory($search_category)
-    {
-        return $this->where('tag_category_id', $search_category)->get();
+        if (!empty($search_word)) {
+            return $this->where('title', 'LIKE', "%{$search_word}%")->get();
+        } elseif (!empty($search_category)) {
+            return $this->where('tag_category_id', $search_category)->get();
+        } elseif ($search_category === '0') {
+            return $this->get();
+        }
     }
 
     public function comment()
