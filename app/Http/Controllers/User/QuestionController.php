@@ -129,7 +129,7 @@ class QuestionController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function confirm(QuestionsRequest $request, $id = null)
+    public function confirm(QuestionsRequest $request)
     {
         $category = $this->category->find($request['tag_category_id'])->name;
         return view('user.question.confirm', compact('request', 'category'));
@@ -143,7 +143,7 @@ class QuestionController extends Controller
      */
     public function myPage()
     {
-        $questions = $this->question->getAll(Auth::id());
+        $questions = $this->question->getAuth(Auth::id());
         return view('user.question.mypage', compact('questions'));
     }
 

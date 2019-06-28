@@ -4,9 +4,6 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use App\Models\User;
-use App\Models\TagCategory;
-use App\Models\Comment;
 
 class Question extends Model
 {
@@ -25,7 +22,7 @@ class Question extends Model
         'deleted_at',
     ];
 
-    public function getAll($id)
+    public function getAuth($id)
     {
         return $this->where('user_id', $id)->get();
     }
@@ -37,12 +34,12 @@ class Question extends Model
 
     public function searchCategory($search_category)
     {
-        return $this->where('tag_category_id', 'LIKE', "%{$search_category}%")->get();
+        return $this->where('tag_category_id', $search_category)->get();
     }
 
     public function comment()
     {
-		    return $this->hasMany(Comment::class, 'question_id');
+		    return $this->hasMany(Comment::class);
 	  }
 
     public function category()

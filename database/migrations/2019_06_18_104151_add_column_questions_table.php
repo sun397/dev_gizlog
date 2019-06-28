@@ -14,7 +14,7 @@ class AddColumnQuestionsTable extends Migration
     public function up()
     {
         Schema::table('questions', function (Blueprint $table) {
-            $table->increments('id');
+            $table->dropColumn('id');
         });
     }
 
@@ -26,7 +26,7 @@ class AddColumnQuestionsTable extends Migration
     public function down()
     {
         Schema::table('questions', function (Blueprint $table) {
-            $table->dropColumn('id');
+            $table->increments('id');
         });
     }
 }
