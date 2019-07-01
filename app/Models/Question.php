@@ -41,8 +41,8 @@ class Question extends Model
     public function category()
     {
 		    return $this->belongsTo(TagCategory::class, 'tag_category_id');
-	  }
-
+    }
+    
     public function comment()
     {
 		    return $this->hasMany(Comment::class);
