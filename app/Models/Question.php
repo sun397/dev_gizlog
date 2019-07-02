@@ -22,18 +22,20 @@ class Question extends Model
         'deleted_at',
     ];
 
-    public function getAuth($id)
+    public function getMyQuestion($id)
     {
         return $this->where('user_id', $id)->get();
     }
 
-    public function searchQuestion($search_category, $search_word)
+    public function searchQuestion($searchCategory, $searchWord)
     {
-        if (!empty($search_word)) {
-            return $this->where('title', 'LIKE', "%{$search_word}%")->get();
-        } elseif (!empty($search_category)) {
-            return $this->where('tag_category_id', $search_category)->get();
-        } elseif ($search_category === '0') {
+        if (!empty($searchWord) && !empty($searchCategory)) {
+            return $this->where('title', 'LIKE', "%{$searchWord}%")->where('tag_category_id', $searchCategory)->get();
+        } elseif (!empty($searchCategory)) {
+            return $this->where('tag_category_id', $searchCategory)->get();
+        } elseif (!empty($searchWord)) {
+            return $this->where('title', 'LIKE', "%{$searchWord}%")->get();
+        } else {
             return $this->get();
         }
     }

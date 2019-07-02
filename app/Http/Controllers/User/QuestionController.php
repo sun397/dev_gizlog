@@ -33,12 +33,12 @@ class QuestionController extends Controller
     public function index(Request $request)
     {
         $input = $request->all();
-        $search_word = $request['search_word'];
-        $search_category = $request['tag_category_id'];
+        $searchWord = $request['search_word'];
+        $searchCategory = $request['tag_category_id'];
         if (empty($input)) {
             $questions = $this->question->all();
         } else {
-            $questions = $this->question->searchQuestion($search_category, $search_word);
+            $questions = $this->question->searchQuestion($searchCategory, $searchWord);
         }
         $categories = $this->category->all();
         return view('user.question.index', compact('questions', 'categories', 'input'));
@@ -139,7 +139,7 @@ class QuestionController extends Controller
      */
     public function myPage()
     {
-        $questions = $this->question->getAuth(Auth::id());
+        $questions = $this->question->getMyQuestion(Auth::id());
         return view('user.question.mypage', compact('questions'));
     }
 
