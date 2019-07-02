@@ -47,7 +47,9 @@
       </div>
       <div class="comment-body">
         {!! Form::textarea('comment', null, ['require', 'class' => 'form-control', 'placeholder' => 'Add your comment...']) !!}
-        <span class="help-block"></span>
+        @if ($errors->has('comment'))
+          <span class="help-block">{{ $errors->first('comment') }}</span>
+        @endif
       </div>
       <div class="comment-bottom">
         <button type="submit" class="btn btn-success">
